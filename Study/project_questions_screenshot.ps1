@@ -79,7 +79,11 @@ $excel.Quit()
 [System.GC]::Collect()
 [System.GC]::WaitForPendingFinalizers()
 
-Write-Host "Arquivo Excel criado e salvo em: $savePath"
+
+Start-Sleep -Seconds 4  # Tempo adicional para as janelas minimizarem completamente
+
+
+
 
 
 # Verificar se o diretório existe, se não, criar
