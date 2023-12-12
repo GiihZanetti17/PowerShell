@@ -8,7 +8,7 @@ $usuario = $env:USERNAME
 Write-Host $usuario
 
 # Criar diretório na rede para salvar os prints
-$diretorioRede = "S:\PS\qmc\Dados_qmc\60_TI\62_Controles\05_5s Eletronico\$usuario"
+$diretorioRede = "x\$usuario"
 
 
 Write-Host $diretorioRede
