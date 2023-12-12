@@ -40,22 +40,31 @@ Capture-DualMonitorScreenshot "$diretorioRede\DualScreen_Minimized.png"
 # Aumentar as janelas antes de capturar os prints das pastas específicas
 $wshell = New-Object -ComObject wscript.shell
 
+# Mapeia os caminhos das pastas especiais e seus títulos correspondentes
+$specialFolders = @{
+    'Desktop' = [System.Environment]::GetFolderPath('Desktop')
+    'Documents' = [System.Environment]::GetFolderPath('MyDocuments')
+    'Pictures' = [System.Environment]::GetFolderPath('MyPictures')
+    'Downloads' = "$env:USERPROFILE\Downloads"
+    'Recycle Bin' = "shell:RecycleBinFolder"
+}
+
 # Abre as janelas e captura os prints
 foreach ($folder in $specialFolders.GetEnumerator()) {
-    $folderPath = $folder.Value[0]
     $folderName = $folder.Key
+    $folderPath = $folder.Value
 
     if ($folderPath -ne $null) {
         # Abre a janela e espera um pouco antes de capturar o print
         Start-Process "explorer.exe" $folderPath
-        Start-Sleep -Seconds 3
+        Start-Sleep -Seconds 2
         
         # Aumenta a janela antes de capturar o print
         $wshell.SendKeys("% x")  # Alt + Espaço (abre o menu da janela)
-        Start-Sleep -Milliseconds 5000
+        Start-Sleep -Milliseconds 500
         $wshell.SendKeys("x")    # Maximize a janela
 
-        Start-Sleep -Seconds 3  # Tempo para a janela maximizar completamente
+        Start-Sleep -Seconds 2  # Tempo para a janela maximizar completamente
 
         Capture-DualMonitorScreenshot "$diretorioRede\$folderName.png"
     } else {
