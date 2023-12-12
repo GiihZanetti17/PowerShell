@@ -5,7 +5,7 @@ Add-Type -AssemblyName System.Drawing
 $usuario = $env:USERNAME
 
 # Criar diretório na rede para salvar os prints
-$diretorioRede = "\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\$usuario"
+$diretorioRede = "S:\PS\qmc\Dados_qmc\60_TI\62_Controles\05_5s Eletronico\$usuario"
 
 # Verificar se o diretório existe, se não, criar
 if (-not (Test-Path $diretorioRede -PathType Container)) {
@@ -28,31 +28,40 @@ function Capture-DualMonitorScreenshot {
     $bitmap.Save($outputFilePath, [System.Drawing.Imaging.ImageFormat]::Png)
 }
 
-#minimizar todos os programas abertos
+# Minimizar todas as janelas abertas
+$shell = New-Object -ComObject Shell.Application
+$shell.MinimizeAll()
 
-Capture-DualMonitorScreenshot "$diretorioRede\Desktop.png"
+Start-Sleep -Seconds 2  # Tempo adicional para as janelas minimizarem completamente
 
-# Mapeia os caminhos das pastas especiais e seus títulos correspondentes
-$specialFolders = @{
-    'Desktop' = [System.Environment]::GetFolderPath('Desktop'), 'Desktop'
-    'Documents' = [System.Environment]::GetFolderPath('MyDocuments'), 'Documents'
-    'Pictures' = [System.Environment]::GetFolderPath('MyPictures'), 'Pictures'
-    'Downloads' = "$env:USERPROFILE\Downloads", 'Downloads'
-    'Recycle Bin' = "shell:RecycleBinFolder", 'Recycle Bin'
-}
+# Capturar print das duas telas minimizadas
+Capture-DualMonitorScreenshot "$diretorioRede\DualScreen_Minimized.png"
+
+# Aumentar as janelas antes de capturar os prints das pastas específicas
+$wshell = New-Object -ComObject wscript.shell
 
 # Abre as janelas e captura os prints
 foreach ($folder in $specialFolders.GetEnumerator()) {
     $folderPath = $folder.Value[0]
+    $folderName = $folder.Key
 
     if ($folderPath -ne $null) {
+        # Abre a janela e espera um pouco antes de capturar o print
         Start-Process "explorer.exe" $folderPath
-        Start-Sleep -Seconds 4
-        Capture-DualMonitorScreenshot "$diretorioRede\$($folder.Key).png"
+        Start-Sleep -Seconds 3
+        
+        # Aumenta a janela antes de capturar o print
+        $wshell.SendKeys("% x")  # Alt + Espaço (abre o menu da janela)
+        Start-Sleep -Milliseconds 5000
+        $wshell.SendKeys("x")    # Maximize a janela
+
+        Start-Sleep -Seconds 3  # Tempo para a janela maximizar completamente
+
+        Capture-DualMonitorScreenshot "$diretorioRede\$folderName.png"
     } else {
-        Write-Host "Caminho da pasta '$($folder.Key)' não encontrado."
+        Write-Host "Caminho da pasta '$folderName' não encontrado."
     }
 }
 
-# Fechar as janelas
+# Fechar as janelas do Explorer
 Stop-Process -Name "explorer" -ErrorAction SilentlyContinue
