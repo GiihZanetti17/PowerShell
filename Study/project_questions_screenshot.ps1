@@ -5,7 +5,7 @@ Add-Type -AssemblyName System.Drawing
 $usuario = $env:USERNAME
 
 # Criar diretório na rede para salvar os prints
-$diretorioRede = "x\$usuario"
+$diretorioRede = "S:\PS\qmc\Dados_qmc\60_TI\62_Controles\05_5s Eletronico\$usuario"
 
 # Função para criar a janela de input
 function Show-InputBox($message) {
@@ -68,10 +68,12 @@ for ($i = 0; $i -lt $questions.Count; $i++) {
 }
 
 # Salvar o arquivo Excel na pasta da rede com o usuário
-$savePath = "x\$env:USERNAME-respostas.xlsx"
+$excelFileName = "$usuario-respostas.xlsx"
+$savePath = Join-Path -Path $diretorioRede -ChildPath $excelFileName
 $workbook.SaveAs($savePath)
 $workbook.Close()
 $excel.Quit()
+
 
 # Limpar objetos Excel da memória
 [System.GC]::Collect()
@@ -122,7 +124,7 @@ $specialFolders = @{
     'Recycle Bin' = "shell:RecycleBinFolder"
 }
 
-# Abre as janelas e captura os prints
+## Abre as janelas e captura os prints
 foreach ($folder in $specialFolders.GetEnumerator()) {
     $folderName = $folder.Key
     $folderPath = $folder.Value
@@ -139,7 +141,7 @@ foreach ($folder in $specialFolders.GetEnumerator()) {
 
         Start-Sleep -Seconds 2  # Tempo para a janela maximizar completamente
 
-        Capture-DualMonitorScreenshot "$diretorioRede\$folderName.png"
+       Capture-DualMonitorScreenshot "$diretorioRede\$folderName.png"
     } else {
         Write-Host "Caminho da pasta '$folderName' não encontrado."
     }
