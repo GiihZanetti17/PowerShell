@@ -5,7 +5,7 @@ Add-Type -AssemblyName System.Drawing
 $usuario = $env:USERNAME
 
 # Criar diretório na rede para salvar os prints
-$diretorioRede = "S:\PS\qmc\Dados_qmc\60_TI\62_Controles\05_5s Eletronico\$usuario"
+$diretorioRede = "xxxxxxxx\$usuario"
 
 # Função para criar a janela de input
 function Show-InputBox($message) {
