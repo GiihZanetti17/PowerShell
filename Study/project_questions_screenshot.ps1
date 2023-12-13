@@ -83,9 +83,6 @@ $excel.Quit()
 Start-Sleep -Seconds 4  # Tempo adicional para as janelas minimizarem completamente
 
 
-
-
-
 # Verificar se o diretório existe, se não, criar
 if (-not (Test-Path $diretorioRede -PathType Container)) {
     New-Item -ItemType Directory -Path $diretorioRede -ErrorAction SilentlyContinue
