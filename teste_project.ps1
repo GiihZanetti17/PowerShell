@@ -5,7 +5,9 @@ Add-Type -AssemblyName System.Drawing
 $usuario = $env:USERNAME
 
 # Criar diretório na rede para salvar os prints
-$diretorioRede = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\$usuario"
+$diretorioRede = "xxxxxxxxxxxxxxxxxxxx\$usuario"
+
+
 
 # Perguntas
 $questions = @(
@@ -37,11 +39,13 @@ $logPath = Join-Path -Path $diretorioRede -ChildPath "$usuario-log.txt"
 "Script executado em: $(Get-Date)" | Out-File -FilePath $logPath -Append
 
 
+
 Start-Sleep -Seconds 4  # Tempo adicional para as janelas minimizarem completamente
 
- # Verificar se o diretório existe, se não, criar
+
+# Verificar se o diretório existe, se não, criar
 if (-not (Test-Path $diretorioRede -PathType Container)) {
-    $null = New-Item -Path $diretorioRede -ItemType Directory -ErrorAction SilentlyContinue
+    New-Item -ItemType Directory -Path $diretorioRede -ErrorAction SilentlyContinue
 }
 
 # Função para tirar um print de uma janela específica
