@@ -5,7 +5,7 @@ Add-Type -AssemblyName System.Drawing
 $usuario = $env:USERNAME
 
 # Criar diretório na rede para salvar os prints
-$diretorioRede = "xxxxxxxxxxxxxxxxxxxx\$usuario"
+$diretorioRede = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\$usuario"
 
 
 
@@ -16,8 +16,10 @@ $questions = @(
     "Contém arquivos duplicados?",
     "Contém arquivos com mais de 5 anos?",
     "Contém arquivos que não são utilizados?",
-    "Selecione duas pastas para você organizar e limpar.",
+    "Informe a 1º pasta para você organizar e limpar.",
+    "Informe a 2º pasta para você organizar e limpar.",
     "Está com o histórico do navegador limpo?",
+    "Pontos de Melhoria",
     "Computador/Notebook está travado com o cadeado?"
 )
 
@@ -40,7 +42,14 @@ $logPath = Join-Path -Path $diretorioRede -ChildPath "$usuario-log.txt"
 
 
 
-Start-Sleep -Seconds 4  # Tempo adicional para as janelas minimizarem completamente
+# Pergunta se a pessoa está pronta para a auditoria
+$readyForAudit = Read-Host -Prompt "Você está pronto para a auditoria? Responda 'sim' para continuar."
+
+# Verifica a resposta e continua se for 'sim'
+if ($readyForAudit -eq 'sim') {
+   
+
+   Start-Sleep -Seconds 4  # Tempo adicional para as janelas minimizarem completamente
 
 
 # Verificar se o diretório existe, se não, criar
@@ -110,3 +119,10 @@ foreach ($folder in $specialFolders.GetEnumerator()) {
 
 # Fechar as janelas do Explorer
 Stop-Process -Name "explorer" -ErrorAction SilentlyContinue
+
+
+    # Exibir mensagem de agradecimento
+    [System.Windows.Forms.MessageBox]::Show("Obrigado por completar a auditoria! Os prints foram capturados com sucesso.", "Auditoria Concluída", [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Information)
+} else {
+    Write-Host "Auditoria cancelada. Os prints não foram capturados."
+}
